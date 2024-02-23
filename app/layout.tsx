@@ -3,6 +3,7 @@ import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from '@clerk/themes';
 
 const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -22,7 +23,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={{
-      variables: {colorPrimary: '#9ec356'}
+      variables: {colorPrimary: '#9ec356'},
+      baseTheme: dark
     }}>
       <html lang="en">
         <body className=
