@@ -1,5 +1,3 @@
-"use client";
-
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
 
@@ -45,7 +43,7 @@ const Checkout = ({
         className: "error-toast",
       });
     }
-  }, []);
+  }, [toast]); // Added toast to dependency array
 
   const onCheckout = async () => {
     const transaction = {
