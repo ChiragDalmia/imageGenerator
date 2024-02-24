@@ -42,6 +42,8 @@ export const InsufficientCreditsModal = () => {
             alt="credit coins"
             width={462}
             height={122}
+            style={{ width: 'auto', height: 'auto' }}
+            priority
           />
 
           <AlertDialogTitle className="p-24-bold text-dark-600">
