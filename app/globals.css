@@ -4,17 +4,16 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --background: 0, 0%, 0%; /* Black background */
+    --foreground: 0, 0%, 100%; /* White text */
+    --card: 18, 14%, 23%; /* Dark gray for card backgrounds */
+    --card-foreground: 0, 0%, 100%; /* White text on cards */
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 222.2, 47.4%, 11.2%; /* Primary color */
+    --primary-foreground: 210, 40%, 98%; /* Primary foreground color */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -28,25 +27,24 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
+    --border: 217.2, 32.6%, 17.5%; /* Light gray for borders */
+    --input: 217.2, 32.6%, 17.5%; /* Light gray for input fields */
+    --ring: 212.7, 26.8%, 83.9%; /* Lighter gray for focus rings */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --background: 0, 0%, 0%; /* Black background for dark mode */
+    --foreground: 0, 0%, 100%; /* White text for dark mode */
+    --card: 18, 14%, 23%; /* Dark gray for card backgrounds in dark mode */
+    --card-foreground: 0, 0%, 100%; /* White text on cards in dark mode */
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210, 40%, 98%; /* Primary color in dark mode */
+    --primary-foreground: 222.2, 47.4%, 11.2%; /* Primary foreground color in dark mode */
+    
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -60,9 +58,9 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 217.2, 32.6%, 17.5%; /* Light gray for borders in dark mode */
+    --input: 217.2, 32.6%, 17.5%; /* Light gray for input fields in dark mode */
+    --ring: 212.7, 26.8%, 83.9%; /* Lighter gray for focus rings in dark mode */
   }
 }
 
@@ -76,11 +74,11 @@
 }
 
 .auth {
-  @apply flex-center min-h-screen w-full bg-purple-100
+  @apply flex-center min-h-screen w-full bg-background
 }
 
 .root {
-  @apply flex min-h-screen w-full flex-col bg-white lg:flex-row;
+  @apply flex min-h-screen w-full flex-col bg-background lg:flex-row;
 }
 
 .root-container {
@@ -95,7 +93,7 @@
   }
 
   .gradient-text {
-    @apply bg-purple-gradient bg-cover bg-clip-text text-transparent;
+    @apply bg-white bg-cover bg-clip-text text-transparent;
   }
 
   /* ===== ALIGNMENTS */
@@ -170,13 +168,6 @@
     @apply py-4 px-6 flex-center gap-3 rounded-full p-16-semibold focus-visible:ring-offset-0 focus-visible:ring-transparent !important;
   }
 
-  .dropdown-content {
-    @apply shadow-lg rounded-md overflow-hidden p-0;
-  }
-
-  .dropdown-item {
-    @apply p-16-semibold text-dark-700 cursor-pointer transition-all px-4 py-3 rounded-none outline-none hover:border-none focus-visible:ring-transparent hover:text-white hover:bg-purple-gradient hover:bg-cover focus-visible:ring-offset-0 focus-visible:outline-none !important;
-  }
 
   .input-field {
     @apply rounded-[16px] border-2 border-purple-200/20 shadow-sm shadow-purple-200/15 text-dark-600 disabled:opacity-100 p-16-semibold h-[50px] md:h-[54px] focus-visible:ring-offset-0 px-4 py-3 focus-visible:ring-transparent !important;
@@ -187,7 +178,7 @@
   }
 
   .submit-button {
-    @apply bg-purple-gradient bg-cover rounded-full py-4 px-6 p-16-semibold h-[50px] w-full md:h-[54px];
+    @apply sm:bg-background sm:text-white bg-[#f4f4f4] text-black bg-cover rounded-full py-4 px-6 p-16-semibold h-[50px] w-full md:h-[54px] hover:text-black hover:bg-[#f4f4f4] !important;
   }
 
   .select-field {
@@ -220,7 +211,7 @@
 
   /* Home Page */
   .home {
-    @apply sm:flex-center hidden h-72 flex-col gap-4 rounded-[20px] border bg-banner bg-cover bg-no-repeat p-10 shadow-inner;
+    @apply sm:flex-center hidden h-72 flex-col gap-4 rounded-[20px] border bg-black bg-cover bg-no-repeat p-10 shadow-inner;
   }
 
   .home-heading {
@@ -233,11 +224,11 @@
   }
 
   .credits-item {
-    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-white p-8 shadow-xl shadow-purple-200/20 lg:max-w-none;
+    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-background  p-8 shadow-xl shadow-purple-200/20 lg:max-w-none;
   }
 
   .credits-btn {
-    @apply w-full rounded-full bg-purple-100 bg-cover text-purple-500 hover:text-purple-500;
+    @apply w-full rounded-full bg-slate-100 bg-cover text-background hover:text-green-500;
   }
 
   /* Profile Page */
@@ -246,11 +237,11 @@
   }
 
   .profile-balance {
-    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-white p-5 shadow-lg shadow-purple-200/10 md:px-6 md:py-8;
+    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-background p-5 shadow-lg shadow-purple-200/10 md:px-6 md:py-8;
   }
 
   .profile-image-manipulation {
-    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-white p-5 shadow-lg shadow-purple-200/10 md:px-6 md:py-8;
+    @apply w-full rounded-[16px] border-2 border-purple-200/20 bg-background p-5 shadow-lg shadow-purple-200/10 md:px-6 md:py-8;
   }
 
   /* Transformation Details */
@@ -259,7 +250,7 @@
   }
 
   .transformation-original_image {
-    @apply h-fit min-h-72 w-full rounded-[10px] border border-dashed bg-purple-100/20 object-cover p-2;
+    @apply h-fit min-h-72 w-full rounded-[10px] border outline-dashed bg-purple-100/20 object-cover;
   }
 
   /* Collection Component */
@@ -276,20 +267,20 @@
   }
 
   .collection-btn {
-    @apply button w-32 bg-purple-gradient bg-cover text-white;
+    @apply button w-32 bg-white bg-cover text-white;
   }
 
   .collection-card {
-    @apply flex flex-1 cursor-pointer flex-col gap-5 rounded-[16px] border-2 border-purple-200/15 bg-white p-4 shadow-xl shadow-purple-200/10 transition-all hover:shadow-purple-200/20;
+    @apply flex flex-1 cursor-pointer flex-col gap-5 rounded-[16px] border-2 border-purple-200/15 bg-background p-4 shadow-xl shadow-purple-200/10 transition-all hover:shadow-purple-200/20;
   }
 
   /* MediaUploader Component */
   .media-uploader_cldImage {
-    @apply h-fit min-h-72 w-full rounded-[10px] border border-dashed bg-purple-100/20 object-cover p-2;
+    @apply h-fit min-h-72 w-full rounded-[10px] border outline-dashed object-cover;
   }
 
   .media-uploader_cta {
-    @apply flex-center flex h-72 cursor-pointer flex-col gap-5 rounded-[16px] border border-dashed bg-purple-100/20 shadow-inner;
+    @apply flex-center flex h-72 cursor-pointer flex-col gap-5 rounded-[16px] border outline-dashed  bg-background shadow-inner;
   }
 
   .media-uploader_cta-image {
@@ -298,25 +289,25 @@
 
   /* Navbar Component */
   .header {
-    @apply flex-between fixed h-16 w-full border-b-4 border-purple-100 bg-white p-5 lg:hidden;
+    @apply flex-between fixed h-16 w-full border-b-2   bg-background p-5 lg:hidden;
   }
 
   .header-nav_elements {
-    @apply mt-8 flex w-full flex-col items-start gap-5;
+    @apply mt-8 flex w-full flex-col items-start gap-3 shadow-xl;
   }
 
   /* Search Component */
   .search {
-    @apply flex w-full rounded-[16px] border-2 border-purple-200/20 bg-white px-4 shadow-sm shadow-purple-200/15 md:max-w-96;
+    @apply flex w-full rounded-[16px] border-2 border-purple-200/20 bg-background px-4 shadow-sm shadow-purple-200/15 md:max-w-96;
   }
 
   /* Sidebar Component */
   .sidebar {
-    @apply hidden h-screen w-72 bg-white p-5 shadow-md shadow-purple-200/50 lg:flex;
+    @apply hidden h-screen w-72 bg-background p-5 shadow-md shadow-slate-200 lg:flex overflow-hidden;
   }
 
   .sidebar-logo {
-    @apply flex items-center gap-2 md:py-2;
+    @apply flex justify-center items-center gap-2 md:py-2;
   }
 
   .sidebar-nav {
@@ -328,13 +319,16 @@
   }
 
   .sidebar-nav_element {
-    @apply flex-center p-16-semibold w-full whitespace-nowrap rounded-full bg-cover  transition-all hover:bg-purple-100 hover:shadow-inner;
+    @apply flex-center p-16-semibold w-full whitespace-nowrap rounded-full bg-cover  transition-all hover:shadow-inner;
   }
 
   .sidebar-link {
-    @apply p-16-semibold flex size-full gap-4 p-4;
+    @apply p-16-semibold flex size-full gap-4 p-4 hover:shadow-inner;
   }
 
+  .active_sidebar-nav_element{
+    @apply bg-white text-black hover:bg-slate-200 hover:text-black
+  }
   /* TransformationForm Component */
   .prompt-field {
     @apply flex flex-col gap-5 lg:flex-row lg:gap-10;
@@ -350,7 +344,7 @@
   }
 
   .transformed-image {
-    @apply h-fit min-h-72 w-full rounded-[10px] border border-dashed bg-purple-100/20 object-cover p-2;
+    @apply h-fit min-h-72 w-full rounded-[10px] border outline-dashed bg-purple-100/20 object-cover;
   }
 
   .transforming-loader {
@@ -358,7 +352,7 @@
   }
 
   .transformed-placeholder {
-    @apply flex-center p-14-medium h-full min-h-72 flex-col gap-5 rounded-[16px] border border-dashed bg-purple-100/20 shadow-inner;
+    @apply flex-center p-14-medium h-full min-h-72 flex-col gap-5 rounded-[16px] border outline-dashed  shadow-inner;
   }
 }
 
@@ -370,7 +364,20 @@
 }
 
 .cl-userButtonOuterIdentifier {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   color: #386239;
+}
+
+
+.cl-formButtonPrimary {
+  font-size: 14px;
+  text-transform: none;
+  color: black;
+}
+ 
+.cl-formButtonPrimary:hover,
+.cl-formButtonPrimary:focus,
+.cl-formButtonPrimary:active {
+  color: black;
 }
