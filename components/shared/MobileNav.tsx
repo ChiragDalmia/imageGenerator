@@ -15,7 +15,7 @@ const MobileNav = () => {
     <header className="header">
       <Link href="/" className="flex items-center gap-2 md:py-2">
         <Image
-          src="/assets/images/logo-text.svg"
+          src="/assets/images/logo-text.png"
           alt="logo"
           width={180}
           height={28}
@@ -37,10 +37,10 @@ const MobileNav = () => {
                 className="cursor-pointer"
               />
             </SheetTrigger>
-            <SheetContent className="sheet-content sm:w-64">
+            <SheetContent className="sheet-content shadow-slate-700 sm:w-72 w-full">
               <>
                 <Image 
-                  src="/assets/images/logo-text.svg"
+                  src="/assets/images/logo-text.png"
                   alt="logo"
                   width={152}
                   height={23}
@@ -62,6 +62,7 @@ const MobileNav = () => {
                         alt="logo"
                         width={24}
                         height={24}
+                        className={isActive ? 'brightness-200' : ''}
                       />
                       {link.label}
                     </Link>
@@ -75,7 +76,7 @@ const MobileNav = () => {
         </SignedIn>
 
         <SignedOut>
-            <Button asChild className="button bg-purple-gradient bg-cover">
+            <Button asChild className="button  bg-white text-black hover:bg-slate-200 bg-cover">
               <Link href="/sign-in">Login</Link>
             </Button>
           </SignedOut>
