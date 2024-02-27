@@ -45,3 +45,7 @@ Photosynth-AI is a cutting-edge Software as a Service (SAAS) application that le
 - ESLint
 - PostCSS
 - Autoprefixer
+
+
+https://github.com/ChiragDalmia/imageGenerator/assets/119760552/be1b65a5-88c7-4fa2-b306-9e9218c46ad5
+
