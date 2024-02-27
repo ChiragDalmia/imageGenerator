@@ -2,6 +2,9 @@
 
 Photosynth-AI is a cutting-edge Software as a Service (SAAS) application that leverages artificial intelligence to provide advanced image transformation capabilities. Built with Next.js and integrated with various technologies, Photosynth-AI offers functionalities like AI image restoration, generative fill, object removal, and recoloring, making it an ideal solution for users seeking to enhance their digital images.
 
+## Demo
+Check out a live demo of Photosynth-AI [here](https://image-generator-five-kappa.vercel.app/).
+
 ## Features
 
 - **AI Image Transformations**: Utilize AI to restore, recolor, remove objects, and more from images.
