@@ -1,4 +1,5 @@
 import { Collection } from "@/components/shared/Collection"
+import { SparklesCore } from "@/components/ui/sparkles"
 import { navLinks } from "@/constants"
 import { getAllImages } from "@/lib/actions/image.actions"
 import Image from "next/image"
@@ -13,6 +14,17 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   return (
     <>
       <section className="home">
+      <div className="w-full absolute inset-0 h-72">
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+        />
+      </div>
         <h1 className="home-heading">
           Unleash Your Creative Vision with
           <br />
