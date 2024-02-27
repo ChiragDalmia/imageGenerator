@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Photosynth-AI
 
-## Getting Started
+Photosynth-AI is a cutting-edge Software as a Service (SAAS) application that leverages artificial intelligence to provide advanced image transformation capabilities. Built with Next.js and integrated with various technologies, Photosynth-AI offers functionalities like AI image restoration, generative fill, object removal, and recoloring, making it an ideal solution for users seeking to enhance their digital images.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **AI Image Transformations**: Utilize AI to restore, recolor, remove objects, and more from images.
+- **User Authentication**: Securely manage user sessions and authentication with Clerk.
+- **Payment Processing**: Process payments with integrated Stripe for premium features.
+- **Responsive Design**: Crafted with Tailwind CSS for a mobile-first, responsive design.
+- **MongoDB Integration**: Store and manage application data efficiently with MongoDB.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Next.js
+- React
+- Tailwind CSS
+- Framer Motion
+- Radix UI
+- Lucide React
 
-## Learn More
+### Backend
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js
+- MongoDB
+- Mongoose
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### AI & Media Handling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Cloudinary
 
-## Deploy on Vercel
+### Authentication
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Clerk
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Payment Processing
+
+- Stripe
+
+### Development Tools
+
+- TypeScript
+- ESLint
+- PostCSS
+- Autoprefixer
