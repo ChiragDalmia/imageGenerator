@@ -1,9 +1,6 @@
 "use client";
-import type { NextPage } from "next";
-import React from "react";
-import { useEffect, useState } from "react";
-import Particles, { initParticlesEngine } from "@tsparticles/react";
-import type { Container, Engine } from "@tsparticles/engine";
+import Particles, { ParticlesProvider } from "@tsparticles/react";
+import type { Container } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 import { motion, useAnimation } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -30,19 +27,10 @@ export const SparklesCore = (props: ParticlesProps) => {
     particleColor,
     particleDensity,
   } = props;
-  const [init, setInit] = useState(false);
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadSlim(engine);
-    }).then(() => {
-      setInit(true);
-    });
-  }, []);
   const controls = useAnimation();
 
   const particlesLoaded = async (container?: Container) => {
     if (container) {
-      console.log(container);
       controls.start({
         opacity: 1,
         transition: {
@@ -53,8 +41,8 @@ export const SparklesCore = (props: ParticlesProps) => {
   };
 
   return (
-    <motion.div animate={controls} className={cn("opacity-0", className)}>
-      {init && (
+    <ParticlesProvider init={loadSlim}>
+      <motion.div animate={controls} className={cn("opacity-0", className)}>
         <Particles
           id={id || "tsparticles"}
           className={cn("h-full w-full")}
@@ -156,7 +144,6 @@ export const SparklesCore = (props: ParticlesProps) => {
               },
               effect: {
                 close: true,
-                fill: true,
                 options: {},
                 type: {} as any,
               },
@@ -165,14 +152,6 @@ export const SparklesCore = (props: ParticlesProps) => {
                 angle: {
                   offset: 0,
                   value: 90,
-                },
-                attract: {
-                  distance: 200,
-                  enable: false,
-                  rotate: {
-                    x: 3000,
-                    y: 3000,
-                  },
                 },
                 center: {
                   x: 50,
@@ -213,11 +192,6 @@ export const SparklesCore = (props: ParticlesProps) => {
                   enable: false,
                 },
                 straight: false,
-                trail: {
-                  enable: false,
-                  length: 10,
-                  fill: {},
-                },
                 vibrate: false,
                 warp: false,
               },
@@ -264,7 +238,6 @@ export const SparklesCore = (props: ParticlesProps) => {
               },
               shape: {
                 close: true,
-                fill: true,
                 options: {},
                 type: "circle",
               },
@@ -429,7 +402,7 @@ export const SparklesCore = (props: ParticlesProps) => {
             detectRetina: true,
           }}
         />
-      )}
-    </motion.div>
+      </motion.div>
+    </ParticlesProvider>
   );
 };

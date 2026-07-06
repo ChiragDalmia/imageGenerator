@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{
+    <ClerkProvider dynamic appearance={{
       variables: {colorPrimary: '#ffffff'},
       baseTheme: dark
     }}>

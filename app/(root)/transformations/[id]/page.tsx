@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,13 +10,14 @@ import { getImageSize } from "@/lib/utils";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
 interface SearchParamProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
-  const { userId } = auth();
+const ImageDetails = async (props: SearchParamProps) => {
+  const { id } = await props.params;
+  const { userId } = await auth();
   const image = await getImageById(id);
 
   return (
