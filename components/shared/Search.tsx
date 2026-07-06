@@ -42,6 +42,7 @@ export const Search = () => {
         alt="search"
         width={24}
         height={24}
+        className="size-6 shrink-0"
       />
 
       <Input
