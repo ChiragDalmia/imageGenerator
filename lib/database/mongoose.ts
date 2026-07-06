@@ -1,6 +1,15 @@
-import mongoose, { Mongoose} from "mongoose";
+import { setServers } from "node:dns";
+import mongoose, { Mongoose } from "mongoose";
 
 const MONGODB_URL = process.env.MONGODB_URL;
+const MONGODB_DNS_SERVERS = process.env.MONGODB_DNS_SERVERS
+  ?.split(",")
+  .map((server) => server.trim())
+  .filter(Boolean);
+
+if (MONGODB_DNS_SERVERS?.length) {
+  setServers(MONGODB_DNS_SERVERS);
+}
 
 interface MongooseConnection {
   conn: Mongoose | null;
@@ -26,7 +35,12 @@ export const connectToDatabase = async()=>{
     bufferCommands: false
   })
 
-  cached.conn = await cached.promise;
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    cached.promise = null;
+    throw error;
+  }
 
   return cached.conn;
 
