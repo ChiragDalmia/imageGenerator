@@ -101,32 +101,40 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
   try {
     await connectToDatabase();
 
-    cloudinary.config({
-      cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
-      secure: true,
-    })
-
-    let expression = 'folder=photosynth-ai';
-
-    if (searchQuery) {
-      expression += ` AND ${searchQuery}`
-    }
-
-    const { resources } = await cloudinary.search
-      .expression(expression)
-      .execute();
-
-    const resourceIds = resources.map((resource: any) => resource.public_id);
-
     let query = {};
 
-    if(searchQuery) {
-      query = {
-        publicId: {
-          $in: resourceIds
+    if (searchQuery) {
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      const apiKey = process.env.CLOUDINARY_API_KEY;
+      const apiSecret = process.env.CLOUDINARY_API_SECRET;
+
+      if (cloudName && apiKey && apiSecret) {
+        cloudinary.config({
+          cloud_name: cloudName,
+          api_key: apiKey,
+          api_secret: apiSecret,
+          secure: true,
+        });
+
+        const { resources } = await cloudinary.search
+          .expression(`folder=photosynth-ai AND ${searchQuery}`)
+          .execute();
+
+        const resourceIds = resources.map((resource: { public_id: string }) => resource.public_id);
+
+        query = {
+          publicId: {
+            $in: resourceIds
+          }
         }
+      } else {
+        const escapedSearchQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        query = {
+          title: {
+            $regex: escapedSearchQuery,
+            $options: "i",
+          },
+        };
       }
     }
 
