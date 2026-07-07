@@ -3,8 +3,7 @@
 import { useToast } from "@/components/ui/use-toast"
 import { dataUrl, getImageSize } from "@/lib/utils";
 import { CldImage, CldUploadWidget } from "next-cloudinary"
-import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
-import Image from "next/image";
+import Image, { type ImageProps } from "next/image";
 
 type MediaUploaderProps = {
   onValueChange: (value: string) => void;
@@ -36,9 +35,9 @@ const MediaUploader = ({
 
     toast({
       title: 'Image uploaded successfully',
-      description: '1 credit was deducted from your account',
+      description: 'You can now apply a transformation',
       duration: 5000,
-      className: 'success-toast' 
+      className: 'success-toast'
     })
   }
 
@@ -54,9 +53,14 @@ const MediaUploader = ({
   return (
     <CldUploadWidget
       uploadPreset="photosynth_ai"
+      signatureEndpoint="/api/sign-cloudinary-params"
       options={{
         multiple: false,
         resourceType: "image",
+        // Basic client-side upload limits; the signed preset enforces the
+        // rest server-side in Cloudinary.
+        clientAllowedFormats: ["png", "jpg", "jpeg", "webp"],
+        maxFileSize: 10 * 1024 * 1024, // 10 MB
       }}
       onSuccess={onUploadSuccessHandler}
       onError={onUploadErrorHandler}
@@ -76,23 +80,23 @@ const MediaUploader = ({
                   src={publicId}
                   alt="image"
                   sizes={"(max-width: 767px) 100vw, 50vw"}
-                  placeholder={dataUrl as PlaceholderValue}
+                  placeholder={dataUrl as ImageProps["placeholder"]}
                   className="media-uploader_cldImage"
                 />
               </div>
             </>
           ): (
-            <div className="media-uploader_cta" onClick={() => open()}>
+            <button type="button" className="media-uploader_cta" onClick={() => open()}>
               <div className="media-uploader_cta-image">
-                <Image 
+                <Image
                   src="/assets/icons/add.svg"
-                  alt="Add Image"
+                  alt=""
                   width={24}
                   height={24}
                 />
               </div>
                 <p className="p-14-medium">Click here to upload image</p>
-            </div>
+            </button>
           )}
         </div>
       )}
