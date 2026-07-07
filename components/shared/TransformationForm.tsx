@@ -13,23 +13,15 @@ import {
 } from "@/components/ui/select"
 
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import { Form } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { aspectRatioOptions, creditFee, defaultValues, transformationTypes } from "@/constants"
 import { CustomField } from "./CustomField"
-import { useEffect, useState, useTransition } from "react"
+import { useEffect, useState } from "react"
 import { AspectRatioKey, debounce, deepMergeObjects } from "@/lib/utils"
 import MediaUploader from "./MediaUploader"
 import TransformedImage from "./TransformedImage"
-import { updateCredits } from "@/lib/actions/user.action"
+import { useToast } from "@/components/ui/use-toast"
 import { getCldImageUrl } from "next-cloudinary"
 import { addImage, updateImage } from "@/lib/actions/image.actions"
 import { useRouter } from "next/navigation"
@@ -50,8 +42,8 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTransforming, setIsTransforming] = useState(false);
   const [transformationConfig, setTransformationConfig] = useState(config)
-  const [isPending, startTransition] = useTransition()
   const router = useRouter()
+  const { toast } = useToast()
 
   const initialValues = data && action === 'Update' ? {
     title: data?.title,
@@ -87,7 +79,7 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
         height: image?.height,
         config: transformationConfig,
         secureURL: image?.secureURL,
-        transformationURL: transformationUrl,
+        transformationUrl: transformationUrl,
         aspectRatio: values.aspectRatio,
         prompt: values.prompt,
         color: values.color,
@@ -104,10 +96,22 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
           if(newImage) {
             form.reset()
             setImage(data)
+            toast({
+              title: 'Image saved',
+              description: '1 credit was deducted from your account',
+              duration: 5000,
+              className: 'success-toast'
+            })
             router.push(`/transformations/${newImage._id}`)
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          toast({
+            title: 'Failed to save image',
+            description: 'Saving costs 1 credit — check your balance and try again',
+            duration: 5000,
+            className: 'error-toast'
+          })
         }
       }
 
@@ -126,7 +130,13 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
             router.push(`/transformations/${updatedImage._id}`)
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
+          toast({
+            title: 'Failed to update image',
+            description: 'Please try again',
+            duration: 5000,
+            className: 'error-toast'
+          })
         }
       }
     }
@@ -163,7 +173,9 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     return onChangeField(value)
   }
 
-  const onTransformHandler = async () => {
+  const onTransformHandler = () => {
+    // Previewing a transformation is free; the credit is charged server-side
+    // when the transformation is saved (in addImage).
     setIsTransforming(true)
 
     setTransformationConfig(
@@ -171,14 +183,14 @@ const TransformationForm = ({ action, data = null, userId, type, creditBalance, 
     )
 
     setNewTransformation(null)
-
-    startTransition(async () => {
-      await updateCredits(userId, creditFee)
-    })
   }
 
   useEffect(() => {
     if(image && (type === 'restore' || type === 'removeBackground')) {
+      // Legacy initialization of the transformation config after an image
+      // upload; restructuring to derive-during-render would change when the
+      // "Apply Transformation" button re-enables.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setNewTransformation(transformationType.config)
     }
   }, [image, transformationType.config, type])

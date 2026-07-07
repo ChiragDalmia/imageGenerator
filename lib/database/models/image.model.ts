@@ -1,4 +1,4 @@
-import { Document, Schema, model, models, Types } from 'mongoose';
+import { Document, Schema, model, models } from 'mongoose';
 
 export interface IImage extends Document {
   title: string;
@@ -21,22 +21,29 @@ export interface IImage extends Document {
   updatedAt: Date;
 }
 
-const ImageSchema = new Schema<IImage>({
-  title: { type: String, required: true },
-  transformationType: { type: String, required: true },
-  publicId: { type: String, required: true },
-  secureURL: { type: String, required: true },
-  width: { type: Number },
-  height: { type: Number },
-  config: { type: Object },
-  transformationUrl: { type: String },
-  aspectRatio: { type: String },
-  color: { type: String },
-  prompt: { type: String },
-  author: { type: Schema.Types.ObjectId, ref: 'User' },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
-});
+const ImageSchema = new Schema<IImage>(
+  {
+    title: { type: String, required: true },
+    transformationType: { type: String, required: true },
+    publicId: { type: String, required: true },
+    secureURL: { type: String, required: true },
+    width: { type: Number },
+    height: { type: Number },
+    config: { type: Object },
+    transformationUrl: { type: String },
+    aspectRatio: { type: String },
+    color: { type: String },
+    prompt: { type: String },
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
+  },
+  // Mongoose maintains createdAt/updatedAt automatically, so updatedAt is
+  // actually bumped on updates (the manual defaults never were).
+  { timestamps: true }
+);
+
+// The gallery sorts by updatedAt and the profile filters by author.
+ImageSchema.index({ updatedAt: -1 });
+ImageSchema.index({ author: 1, updatedAt: -1 });
 
 const Image = models?.Image || model<IImage>('Image', ImageSchema);
 

@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 
 import { Collection } from "@/components/shared/Collection";
 import Header from "@/components/shared/Header";
-import { getUserImages } from "@/lib/actions/image.actions";
-import { getUserById } from "@/lib/actions/user.action";
+import { getUserImages } from "@/lib/actions/image.queries";
+import { getOrCreateUser } from "@/lib/actions/user.action";
 
 const Profile = async ({ searchParams }: SearchParamProps) => {
   const resolvedSearchParams = await searchParams;
@@ -14,7 +14,7 @@ const Profile = async ({ searchParams }: SearchParamProps) => {
 
   if (!userId) redirect("/sign-in");
 
-  const user = await getUserById(userId);
+  const user = await getOrCreateUser(userId);
   const images = await getUserImages({ page, userId: user._id });
 
   return (
@@ -41,7 +41,7 @@ const Profile = async ({ searchParams }: SearchParamProps) => {
           <div className="mt-4 flex items-center gap-4">
             <Image
               src="/assets/icons/photo.svg"
-              alt="coins"
+              alt="photos"
               width={50}
               height={50}
               className="size-9 md:size-12"

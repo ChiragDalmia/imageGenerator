@@ -1,11 +1,11 @@
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import Header from "@/components/shared/Header";
 import TransformationForm from "@/components/shared/TransformationForm";
 import { transformationTypes } from "@/constants";
-import { getUserById } from "@/lib/actions/user.action";
-import { getImageById } from "@/lib/actions/image.actions";
+import { getOrCreateUser } from "@/lib/actions/user.action";
+import { getImageById } from "@/lib/actions/image.queries";
 
 const Page = async (props: SearchParamProps) => {
   const { id } = await props.params;
@@ -13,8 +13,10 @@ const Page = async (props: SearchParamProps) => {
 
   if (!userId) redirect("/sign-in");
 
-  const user = await getUserById(userId);
+  const user = await getOrCreateUser(userId);
   const image = await getImageById(id);
+
+  if (!image) notFound();
 
   const transformation =
     transformationTypes[image.transformationType as TransformationTypeKey];

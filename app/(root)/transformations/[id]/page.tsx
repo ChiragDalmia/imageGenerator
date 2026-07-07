@@ -1,11 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 import Header from "@/components/shared/Header";
 import TransformedImage from "@/components/shared/TransformedImage";
 import { Button } from "@/components/ui/button";
-import { getImageById } from "@/lib/actions/image.actions";
+import { getImageById } from "@/lib/actions/image.queries";
+import { getOrCreateUser } from "@/lib/actions/user.action";
 import { getImageSize } from "@/lib/utils";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 
@@ -19,6 +21,16 @@ const ImageDetails = async (props: SearchParamProps) => {
   const { id } = await props.params;
   const { userId } = await auth();
   const image = await getImageById(id);
+
+  if (!image) notFound();
+
+  // Ownership is compared via database ids; Clerk IDs are never sent to the
+  // client, so they are also not read off the populated author here.
+  let isOwner = false;
+  if (userId) {
+    const user = await getOrCreateUser(userId);
+    isOwner = String(image.author?._id) === String(user._id);
+  }
 
   return (
     <>
@@ -71,7 +83,7 @@ const ImageDetails = async (props: SearchParamProps) => {
               width={getImageSize(image.transformationType, image, "width")}
               height={getImageSize(image.transformationType, image, "height")}
               src={image.secureURL}
-              alt="image"
+              alt={`Original image: ${image.title}`}
               className="transformation-original_image"
             />
           </div>
@@ -86,7 +98,7 @@ const ImageDetails = async (props: SearchParamProps) => {
           />
         </div>
 
-        {userId && image.author.clerkId && userId === image.author.clerkId && (
+        {isOwner && (
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">
               <Link href={`/transformations/${image._id}/update`}>

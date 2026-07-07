@@ -1,19 +1,25 @@
 import Header from '@/components/shared/Header';
 import TransformationForm from '@/components/shared/TransformationForm';
 import { transformationTypes } from '@/constants';
-import { getUserById } from '@/lib/actions/user.action';
+import { getOrCreateUser } from '@/lib/actions/user.action';
 import { auth } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import React from 'react'
 
 const AddTransformationTypePage = async (props: SearchParamProps) => {
   const { type } = await props.params;
+
+  // The route param is user-controlled at runtime; reject unknown types.
+  if (!Object.prototype.hasOwnProperty.call(transformationTypes, type)) {
+    notFound();
+  }
+
   const transformation = transformationTypes[type];
   const {userId} = await auth();
 
   if (!userId) redirect('/sign-in');
 
-  const user = await getUserById(userId);
+  const user = await getOrCreateUser(userId);
 
   return (
     <>
