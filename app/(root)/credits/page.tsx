@@ -6,15 +6,12 @@ import { redirect } from "next/navigation";
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import { plans } from "@/constants";
-import { getUserById } from "@/lib/actions/user.action";
-import Checkout from "@/components/shared/Checkout";
+import Checkout, { CheckoutStatus } from "@/components/shared/Checkout";
 
 const Credits = async () => {
   const { userId } = await auth();
 
   if (!userId) redirect("/sign-in");
-
-  const user = await getUserById(userId);
 
   return (
     <>
@@ -23,12 +20,14 @@ const Credits = async () => {
         subtitle="Choose a credit package that suits your needs!"
       />
 
+      <CheckoutStatus />
+
       <section>
         <ul className="credits-list">
           {plans.map((plan) => (
             <li key={plan.name} className="credits-item">
               <div className="flex-center flex-col gap-3">
-                <Image src={plan.icon} alt="check" width={50} height={50} />
+                <Image src={plan.icon} alt="" width={50} height={50} />
                 <p className="p-20-semibold mt-2 text-green-500">
                   {plan.name}
                 </p>
@@ -47,7 +46,7 @@ const Credits = async () => {
                       src={`/assets/icons/${
                         inclusion.isIncluded ? "check.svg" : "cross.svg"
                       }`}
-                      alt="check"
+                      alt={inclusion.isIncluded ? "Included" : "Not included"}
                       width={24}
                       height={24}
                     />
@@ -62,12 +61,7 @@ const Credits = async () => {
                 </Button>
               ) : (
                 <SignedIn>
-                  <Checkout
-                    plan={plan.name}
-                    amount={plan.price}
-                    credits={plan.credits}
-                    buyerId={user._id}
-                  />
+                  <Checkout plan={plan.name} />
                 </SignedIn>
               )}
             </li>

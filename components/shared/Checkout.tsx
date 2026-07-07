@@ -1,43 +1,32 @@
 'use client'
 
-import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { useToast } from "@/components/ui/use-toast";
 import { checkoutCredits } from "@/lib/actions/transaction.action";
 
 import { Button } from "../ui/button";
 
-const Checkout = ({
-  plan,
-  amount,
-  credits,
-  buyerId,
-}: {
-  plan: string;
-  amount: number;
-  credits: number;
-  buyerId: string;
-}) => {
+// Shows the post-checkout toast. Rendered once on the credits page (the
+// Stripe success/cancel URLs point back at /credits) — kept separate from
+// the Checkout button, which is rendered once per plan.
+export const CheckoutStatus = () => {
   const { toast } = useToast();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-  }, []);
-
-  useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
-    if (query.get("success")) {
+    if (searchParams.get("success")) {
       toast({
         title: "Order placed!",
-        description: "You will receive an email confirmation",
+        description: "Your credits will be added to your account shortly",
         duration: 5000,
         className: "success-toast",
       });
     }
 
-    if (query.get("canceled")) {
+    if (searchParams.get("canceled")) {
       toast({
         title: "Order canceled!",
         description: "Continue to shop around and checkout when you're ready",
@@ -45,21 +34,27 @@ const Checkout = ({
         className: "error-toast",
       });
     }
-  }, [toast]); // Added toast to dependency array
 
+    // Strip the status params so a refresh doesn't repeat the toast.
+    if (searchParams.get("success") || searchParams.get("canceled")) {
+      router.replace("/credits", { scroll: false });
+    }
+  }, [toast, router, searchParams]);
+
+  return null;
+};
+
+// Only the plan name is sent to the server; price, credits and buyer are
+// resolved server-side in checkoutCredits so they cannot be tampered with.
+// Stripe.js is not needed here: the Server Action redirects straight to the
+// Stripe-hosted Checkout page.
+const Checkout = ({ plan }: { plan: string }) => {
   const onCheckout = async () => {
-    const transaction = {
-      plan,
-      amount,
-      credits,
-      buyerId,
-    };
-
-    await checkoutCredits(transaction);
+    await checkoutCredits(plan);
   };
 
   return (
-    <form action={onCheckout} method="POST">
+    <form action={onCheckout}>
       <section>
         <Button
           type="submit"
