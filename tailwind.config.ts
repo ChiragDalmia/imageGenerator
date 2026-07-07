@@ -93,5 +93,6 @@ module.exports = {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- CommonJS Tailwind config
   plugins: [require("tailwindcss-animate")],
 };

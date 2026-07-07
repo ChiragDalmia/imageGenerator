@@ -3,33 +3,40 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import qs from "qs";
 
 import { Input } from "@/components/ui/input";
-import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 
 export const Search = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState("");
+  // Initialize from the URL so a shared/bookmarked search link isn't wiped
+  // by the first debounce tick.
+  const [query, setQuery] = useState(searchParams.get("query") ?? "");
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
+      const current = searchParams.get("query") ?? "";
+      if (query === current) return;
+
+      const params = qs.parse(searchParams.toString());
+
+      // A new search starts from page 1.
+      delete params.page;
+
       if (query) {
-        const newUrl = formUrlQuery({
-          searchParams: searchParams.toString(),
-          key: "query",
-          value: query,
-        });
-
-        router.push(newUrl, { scroll: false });
+        params.query = query;
       } else {
-        const newUrl = removeKeysFromQuery({
-          searchParams: searchParams.toString(),
-          keysToRemove: ["query"],
-        });
-
-        router.push(newUrl, { scroll: false });
+        delete params.query;
       }
+
+      const queryString = qs.stringify(params, { skipNulls: true });
+      router.push(
+        queryString
+          ? `${window.location.pathname}?${queryString}`
+          : window.location.pathname,
+        { scroll: false }
+      );
     }, 300);
 
     return () => clearTimeout(delayDebounceFn);
@@ -39,7 +46,7 @@ export const Search = () => {
     <div className="search">
       <Image
         src="/assets/icons/search.svg"
-        alt="search"
+        alt=""
         width={24}
         height={24}
         className="size-6 shrink-0"
@@ -48,6 +55,8 @@ export const Search = () => {
       <Input
         className="search-field"
         placeholder="Search"
+        aria-label="Search images"
+        value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
     </div>

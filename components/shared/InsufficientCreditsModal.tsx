@@ -29,7 +29,7 @@ export const InsufficientCreditsModal = () => {
             >
               <Image
                 src="/assets/icons/close.svg"
-                alt="credit coins"
+                alt="close"
                 width={24}
                 height={24}
                 className="cursor-pointer"
