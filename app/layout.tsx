@@ -8,12 +8,33 @@ import { dark } from '@clerk/themes';
 const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
+  // Must match the variable Tailwind's font-IBMPlex utility reads
+  // (tailwind.config.ts).
+  variable: '--font-ibm-plex',
 });
 
+const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Photosynth Ai",
-  description: "Ai powered image generator",
+  metadataBase: new URL(serverUrl),
+  title: {
+    default: "Photosynth AI",
+    template: "%s | Photosynth AI",
+  },
+  description:
+    "AI-powered image transformations: restore, recolor, remove objects and backgrounds, and generative fill.",
+  openGraph: {
+    title: "Photosynth AI",
+    description:
+      "AI-powered image transformations: restore, recolor, remove objects and backgrounds, and generative fill.",
+    url: serverUrl,
+    siteName: "Photosynth AI",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider dynamic appearance={{
+    <ClerkProvider appearance={{
       variables: {colorPrimary: '#ffffff'},
       baseTheme: dark
     }}>
