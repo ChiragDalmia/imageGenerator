@@ -1,4 +1,4 @@
-import { Document, Schema, model, models, Types } from 'mongoose';
+import { Document, Schema, model, models } from 'mongoose';
 
 export interface IUser extends Document {
   clerkId: string;
@@ -19,8 +19,10 @@ const UserSchema = new Schema<IUser>({
   photo: { type: String, required: true },
   firstName: { type: String },
   lastName: { type: String },
-  planId: { type: Number, default: 1 }, 
-  creditBalance: { type: Number, default: 10 },
+  planId: { type: Number, default: 1 },
+  // Must match the "20 Free Credits" advertised on the Free plan in
+  // constants/index.ts.
+  creditBalance: { type: Number, default: 20 },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { WebhookEvent, clerkClient } from '@clerk/nextjs/server'
 
 import { NextResponse } from "next/server";
-import { createUser, deleteUser, updateUser } from "@/lib/actions/user.action";
+import { createUser, deleteUser, deriveUsername, updateUser } from "@/lib/actions/user.action";
  
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -59,12 +59,18 @@ export async function POST(req: Request) {
    if (eventType === "user.created") {
     const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
 
+    const email = email_addresses[0]?.email_address;
+    if (!email) {
+      return NextResponse.json({ message: "User has no email address" }, { status: 400 });
+    }
+
+    // username, first_name and last_name are all optional in Clerk.
     const user = {
       clerkId: id,
-      email: email_addresses[0].email_address,
-      username: username!,
-      firstName: first_name!,
-      lastName: last_name!,
+      email,
+      username: deriveUsername(username, email, id),
+      firstName: first_name ?? undefined,
+      lastName: last_name ?? undefined,
       photo: image_url,
     };
 
@@ -87,12 +93,14 @@ export async function POST(req: Request) {
   if (eventType === "user.updated") {
     const { id, image_url, first_name, last_name, username } = evt.data;
 
-    const user = {
-      firstName: first_name!,
-      lastName: last_name!,
-      username: username!,
+    // Only set fields Clerk actually has values for, so a user without a
+    // username/name doesn't wipe existing data or violate the schema.
+    const user: UpdateUserParams = {
+      firstName: first_name ?? undefined,
+      lastName: last_name ?? undefined,
       photo: image_url,
     };
+    if (username) user.username = username;
 
     const updatedUser = await updateUser(id, user);
 

@@ -5,15 +5,15 @@ declare type CreateUserParams = {
   clerkId: string;
   email: string;
   username: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   photo: string;
 };
 
 declare type UpdateUserParams = {
-  firstName: string;
-  lastName: string;
-  username: string;
+  firstName?: string;
+  lastName?: string;
+  username?: string;
   photo: string;
 };
 
@@ -27,7 +27,7 @@ declare type AddImageParams = {
     height: number;
     config: any;
     secureURL: string;
-    transformationURL: string;
+    transformationUrl: string;
     aspectRatio: string | undefined;
     prompt: string | undefined;
     color: string | undefined;
@@ -46,7 +46,7 @@ declare type UpdateImageParams = {
     height: number;
     config: any;
     secureURL: string;
-    transformationURL: string;
+    transformationUrl: string;
     aspectRatio: string | undefined;
     prompt: string | undefined;
     color: string | undefined;
@@ -69,23 +69,6 @@ declare type Transformations = {
     multiple?: boolean;
   };
   removeBackground?: boolean;
-};
-
-// ====== TRANSACTION PARAMS
-declare type CheckoutTransactionParams = {
-  plan: string;
-  credits: number;
-  amount: number;
-  buyerId: string;
-};
-
-declare type CreateTransactionParams = {
-  stripeId: string;
-  amount: number;
-  credits: number;
-  plan: string;
-  buyerId: string;
-  createdAt: Date;
 };
 
 declare type TransformationTypeKey =
