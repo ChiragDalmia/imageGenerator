@@ -1,4 +1,5 @@
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 
 const eslintConfig = [
   {
@@ -13,12 +14,12 @@ const eslintConfig = [
     },
   },
   ...nextCoreWebVitals,
+  ...nextTypescript,
   {
     rules: {
-      // Introduced by eslint-plugin-react-hooks v7 (bundled with
-      // eslint-config-next 16); absent from the v4 rule set used pre-upgrade.
-      // Disabled to keep lint behavior identical without refactoring app code.
-      "react-hooks/set-state-in-effect": "off",
+      // Pre-existing `any` usage throughout the original codebase; kept as a
+      // warning so new code is still flagged without failing CI on legacy code.
+      "@typescript-eslint/no-explicit-any": "warn",
     },
   },
 ];
